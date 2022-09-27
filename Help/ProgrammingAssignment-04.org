@@ -1,0 +1,145 @@
+#+TITLE:       Programming Assignment #4
+#+AUTHOR:      CSci 530, Summer 2015
+#+EMAIL:       derek@harter.pro
+#+DATE:        
+#+DESCRIPTION: Programming Assignment #3
+#+OPTIONS:   H:4 num:nil toc:nil
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:nil pri:nil tags:not-in-toc
+#+LATEX_HEADER: \addtolength{\oddsidemargin}{-.875in}
+#+LATEX_HEADER: \addtolength{\evensidemargin}{-.875in}
+#+LATEX_HEADER: \addtolength{\textwidth}{1.75in}
+#+LATEX_HEADER: \addtolength{\topmargin}{-.875in}
+#+LATEX_HEADER: \addtolength{\textheight}{1.75in}
+
+* Dates:
+
+| Assigned: | Monday July 20, 2015 |
+| Due:      | Friday July 31, 2015 (before Midnight) |
+
+
+* Objectives:
+
+  - Understand short-term process scheduling.
+  - Work with data structures to implement a round-robin scheduler.
+  - Look at effects of different time slice quantum sizes on the round-robin scheduling algorithm.
+  - Use C/C++ to implement vector and matrix data structures, get
+    practice in creating and using such data structures in C/C++.
+
+
+* Description:
+
+Our textbooks chapter 9 discusses several possible short-term process
+scheduling policies.  In this programming assignment exercise we will
+implement two of the preemptive policies, the simple shortest
+remaining time policy (SRT) and the round-robin scheduler with
+preemptive time slicing.  Your program will be given a simple input
+file, indicating the process name, its arrival time and its total
+service time, the same as the process scheduling examples from our
+textbook in Table 9.4 and Figure 9.5.  You will simulate the execution
+of the required schedulers.  As in previous assignments, you program
+will need to work non-interactively and be callable from the command
+line.  The program will be provided with the file name of a file with
+process information, in the format discussed below.  Your program will
+also be given the time slicing quantum parameter it is to use for the
+simulation, if round-robin scheduling is selected.  Your program will
+need to output the results of running the set of simulated processes
+using the selected scheduling policy with the indicated time slice for
+the round-robin scheduler.  Your program will have to output its
+results exactly as shown below in the required output format.  Your
+program will also need to calculate some summary statistics for the
+simulated processes, including the turnaround time and T_r/T_s ratio
+for each process, and the mean T_r and T_r/T_s values for the given
+simulation.
+
+** Process simulation file formats
+
+The files with the information about the processes to be simulated are
+fairly simple, and have the same information that our textbook uses to
+illustrate the process scheduling examples.  Each simulation file
+contains multiple rows of data, where each row consists of the process
+name, its arrival time, and its service time.  Here is an example:
+
+#+begin_example
+A 0 3
+B 2 6
+C 4 4
+D 6 5
+E 8 2
+#+end_example
+
+This file is named process-01.sim in the zip archive of files I have
+given you to get started on this assignment.  This is also the same
+set of processes and start/service times used for all of the examples
+in table 9.4 and figure 9.5.
+
+** Running Simulations
+
+As with previous assignments you are required to support using your
+simulation from the command line.  Your program will take the name of 
+the file containing the process information first.  The next parameter
+will be either 'rr' to perform round-robin scheduling, or 'srt' if
+shortest remaining time policy is to be simulated.  Finally, a 3rd
+parameter will be supplied for the round-robin scheduler, the time
+slice quantum to use. An example of running your finished program
+should look like this:
+
+#+begin_example
+$ ./p3 process-01.sim rr 4 
+A A A B B B B C C C C D D D D B B E E D 
+Name Fnsh T_r  T_r/T_s
+----------------------
+A       3   3       1
+B      17  15     2.5
+C      11   7    1.75
+D      20  14     2.8
+E      19  11     5.5
+#+end_example
+
+Here we are running the simulation using the set of process
+information given in the previous section and with a time slice
+quantum of 4.
+
+** Required Output
+
+As shown above, your program must generate 2 bits of output.  First of
+all, while running the simulation of the selected scheduling policy,
+you should display the process names in the order they are run.  In
+the previous example, the sequence of scheduled/run processes was:
+
+#+begin_example
+A A A B B B B C C C C D D D D B B E E D
+#+end_example
+
+This indicates that process A ran first (times 0, 1 and 2), followed
+by B running 4 times (times 3 to 7), etc.  You are required to output
+the sequence of process runs as the first line of output, with a
+single space in between each process name as shown.
+
+After the processes have run, you need to calculate and display the
+statistics for the processes that you just simulated.  In our previous
+example, the statistics for our round-robin simulation with a time
+quantum of 4 time slices were:
+
+#+begin_example
+Name Fnsh T_r  T_r/T_s
+----------------------
+A       3   3       1
+B      17  15     2.5
+C      11   7    1.75
+D      20  14     2.8
+E      19  11     5.5
+#+end_example
+
+For each process, you need to output the time when it finished, the
+turnaround time ($T_r$) and the ratio of the turnaround time to the
+service time ($T_r / T_s$).
+
+I have provided a zip file with a file named p3-start.cpp as a
+template to get you started.  In addition, I have provided you with
+two process simulation files, named process-01.sim and process-02.sim,
+with 2 sets of process information you can simulate.  There are
+several examples of correct results generated for the two sets of
+inputs, named things like process-01-q1.res, process-01-q4.res,
+process-01-srt.res, etc.  These are the correct results you should get
+for running your simulation with round-robin scheduling for various
+time quantums or for shortest remaining time scheduling.
